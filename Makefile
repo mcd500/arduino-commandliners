@@ -1,7 +1,10 @@
 SHELL = /bin/bash -xue
 
-AVR_FREQ ?= 8000000L
+# Adjast for your board
+AVR_FREQ ?= 16000000L
 MCU ?= atmega328p
+MONITOR_PORT ?= /dev/ttyACM0
+MONITOR_BAUDRATE = 115200
 
 CC = avr-gcc
 CXX = avr-g++
@@ -9,7 +12,6 @@ OBJCOPY = avr-objcopy
 AR = avr-gcc-ar
 CFLAGS += -g -Wall -DF_CPU=$(AVR_FREQ) -mmcu=$(MCU)
 
-MONITOR_PORT ?= `echo your serial port on pc`
 ARDUINO_LIBS ?= SoftwareSerial
 
 INCLUDES := -I/usr/share/arduino/libraries/SoftwareSerial \
