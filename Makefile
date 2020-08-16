@@ -5,9 +5,13 @@ MCU ?= atmega328p
 MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 
+# List library names you only use in your sources
 ARDUINO_LIBS ?= SoftwareSerial
 
+# File name of your sources
 SRC := main.cpp
+
+# File name of generated binary to upload to Arduino
 TARGET := example
 BIN := $(TARGET).bin
 HEX := $(TARGET).hex
@@ -31,7 +35,6 @@ OBJCOPY := avr-objcopy
 AR := avr-gcc-ar
 
 all: $(CORE_LIB) $(BIN) $(HEX)
-## Bellow here is to build libcore.a
 
 CFLAGS_STD = -std=gnu11 -flto -fno-fat-lto-objects
 CXXFLAGS_STD = -fpermissive -fno-exceptions -std=gnu++11 -fno-threadsafe-statics -flto
