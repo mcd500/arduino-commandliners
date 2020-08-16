@@ -70,7 +70,8 @@ USER_INCLUDES       := $(foreach lib, $(USER_LIBS), $(call get_library_includes,
 CPPFLAGS += -mmcu=$(MCU) -DF_CPU=$(AVR_FREQ) -D__PROG_TYPES_COMPAT__ \
         -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT) \
         $(SYS_INCLUDES) $(PLATFORM_INCLUDES) $(USER_INCLUDES) -Wall -ffunction-sections \
-        -fdata-sections -Os
+        -fdata-sections -Os \
+	-D__AVR_ATmega328P__ -DARDUINO=181
 
 CORE_C_SRCS     = $(wildcard $(ARDUINO_CORE_PATH)/*.c)
 CORE_C_SRCS    += $(wildcard $(ARDUINO_CORE_PATH)/avr-libc/*.c)
