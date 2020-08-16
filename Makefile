@@ -1,4 +1,3 @@
-SHELL = /bin/bash -xue
 
 # Adjast for your board
 AVR_FREQ ?= 16000000L
@@ -6,22 +5,16 @@ MCU ?= atmega328p
 MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 
-CC = avr-gcc
-CXX = avr-g++
-OBJCOPY = avr-objcopy
-AR = avr-gcc-ar
-CFLAGS += -g -Wall -DF_CPU=$(AVR_FREQ) -mmcu=$(MCU)
-
 ARDUINO_LIBS ?= SoftwareSerial
-
-INCLUDES := -I/usr/share/arduino/libraries/SoftwareSerial \
-	-I/usr/share/arduino/hardware/arduino/cores/arduino \
-	-I/usr/share/arduino/hardware/arduino/variants/standard
 
 SRC := main.cpp
 TARGET := example
 BIN := $(TARGET).bin
 HEX := $(TARGET).hex
+
+# Only have to edit above
+# Others below are for building and linking libraries automatically.
+SHELL = /bin/bash -xue
 
 ARDUINO_DIR = /usr/share/arduino
 ARDUINO_CORE_PATH = /usr/share/arduino/hardware/arduino/cores/arduino
@@ -30,20 +23,14 @@ VARIANT = standard
 OBJDIR = .
 CORE_LIB = $(OBJDIR)/libcore.a
 
+INCLUDES = -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT)
+
+CC := avr-gcc
+CXX := avr-g++
+OBJCOPY := avr-objcopy
+AR := avr-gcc-ar
+
 all: $(CORE_LIB) $(BIN) $(HEX)
-
-$(BIN): $(SRC) $(CORE_LIB)
-	$(CXX) $(INCLUDES) $(CFLAGS) $^ -o $@
-
-$(HEX): $(BIN)
-	$(OBJCOPY) -O ihex -R .eeprom $< $@
-
-upload: $(HEX)
-	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b 115200 -U flash:w:$<
-
-clean:
-	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs
-
 ## Bellow here is to build libcore.a
 
 CFLAGS_STD = -std=gnu11 -flto -fno-fat-lto-objects
@@ -134,3 +121,17 @@ $(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH)/%.S
 
 $(CORE_LIB): $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS)
 	$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
+
+# Building arduino binari image
+
+$(BIN): $(SRC) $(CORE_LIB)
+	$(CXX) $(INCLUDES) $(SYS_INCLUDES) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
+
+$(HEX): $(BIN)
+	$(OBJCOPY) -O ihex -R .eeprom $< $@
+
+upload: $(HEX)
+	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b 115200 -U flash:w:$<
+
+clean:
+	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs
