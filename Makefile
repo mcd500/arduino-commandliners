@@ -92,12 +92,6 @@ $(OBJDIR)/core/%.c.o: $(ARDUINO_CORE_PATH)/%.c $(COMMON_DEPS) | $(OBJDIR)
 	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
 
 $(OBJDIR)/core/%.cpp.o: $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
-	echo ARDUINO_LIBS=$(ARDUINO_LIBS)
-	echo USER_LIBS=$(USER_LIBS)
-	echo
-	echo USER_LIB_NAMES=$(USER_LIB_NAMES)
-	echo
-	echo USER_INCLUDES=$(USER_INCLUDES)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS_STD) $< -o $@
 
