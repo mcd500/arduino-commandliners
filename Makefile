@@ -2,6 +2,9 @@
 # Adjast for your board
 AVR_FREQ ?= 16000000L
 MCU ?= atmega328p
+# Manually add them which Arduino IDE gives automotically
+ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR
+
 MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 
@@ -70,8 +73,7 @@ USER_INCLUDES       := $(foreach lib, $(USER_LIBS), $(call get_library_includes,
 CPPFLAGS += -mmcu=$(MCU) -DF_CPU=$(AVR_FREQ) -D__PROG_TYPES_COMPAT__ \
         -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT) \
         $(SYS_INCLUDES) $(PLATFORM_INCLUDES) $(USER_INCLUDES) -Wall -ffunction-sections \
-        -fdata-sections -Os \
-	-D__AVR_ATmega328P__ -DARDUINO=181
+        -fdata-sections -Os $(ARD_CFLAGS) \
 
 CORE_C_SRCS     = $(wildcard $(ARDUINO_CORE_PATH)/*.c)
 CORE_C_SRCS    += $(wildcard $(ARDUINO_CORE_PATH)/avr-libc/*.c)
