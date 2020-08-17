@@ -10,6 +10,7 @@ MONITOR_BAUDRATE = 115200
 
 # List library names you only use in your sources
 ARDUINO_LIBS ?= SoftwareSerial
+USER_LIB_PATH ?= $(HOME)/sketchbook/libraries
 
 # File name of your sources
 SRC := main.cpp
@@ -56,6 +57,8 @@ ARDUINO_LIB_PATH = $(ARDUINO_DIR)/libraries
 
 ARDUINO_LIBS += $(filter $(notdir $(wildcard $(ARDUINO_DIR)/libraries/*)), \
 	$(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
+ARDUINO_LIBS += $(filter $(notdir $(wildcard $(USER_LIB_PATH)/*)), \
+	$(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
 
 USER_LIBS      := $(sort $(wildcard $(patsubst %,$(USER_LIB_PATH)/%,$(ARDUINO_LIBS))))
 USER_LIB_NAMES := $(patsubst $(USER_LIB_PATH)/%,%,$(USER_LIBS))
@@ -89,6 +92,12 @@ $(OBJDIR)/core/%.c.o: $(ARDUINO_CORE_PATH)/%.c $(COMMON_DEPS) | $(OBJDIR)
 	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
 
 $(OBJDIR)/core/%.cpp.o: $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
+	echo ARDUINO_LIBS=$(ARDUINO_LIBS)
+	echo USER_LIBS=$(USER_LIBS)
+	echo
+	echo USER_LIB_NAMES=$(USER_LIB_NAMES)
+	echo
+	echo USER_INCLUDES=$(USER_INCLUDES)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS_STD) $< -o $@
 
@@ -113,6 +122,10 @@ LIB_OBJS = $(patsubst $(ARDUINO_LIB_PATH)/%.c,$(OBJDIR)/libs/%.c.o,$(LIB_C_SRCS)
 	$(patsubst $(ARDUINO_LIB_PATH)/%.cpp,$(OBJDIR)/libs/%.cpp.o,$(LIB_CPP_SRCS)) \
 	$(patsubst $(ARDUINO_LIB_PATH)/%.S,$(OBJDIR)/libs/%.S.o,$(LIB_AS_SRCS))
 
+USER_LIB_OBJS = $(patsubst $(USER_LIB_PATH)/%.cpp,$(OBJDIR)/userlibs/%.cpp.o,$(USER_LIB_CPP_SRCS)) \
+	$(patsubst $(USER_LIB_PATH)/%.c,$(OBJDIR)/userlibs/%.c.o,$(USER_LIB_C_SRCS)) \
+	$(patsubst $(USER_LIB_PATH)/%.S,$(OBJDIR)/userlibs/%.S.o,$(USER_LIB_AS_SRCS))
+
 $(OBJDIR)/libs/%.c.o: $(ARDUINO_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
@@ -125,8 +138,20 @@ $(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-$(CORE_LIB): $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS)
-	$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
+$(OBJDIR)/userlibs/%.cpp.o: $(USER_LIB_PATH)/%.cpp
+	@$(MKDIR) $(dir $@)
+	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+
+$(OBJDIR)/userlibs/%.c.o: $(USER_LIB_PATH)/%.c
+	@$(MKDIR) $(dir $@)
+	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+
+$(OBJDIR)/userlibs/%.S.o: $(USER_LIB_PATH)/%.S
+	@$(MKDIR) $(dir $@)
+	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
+
+$(CORE_LIB): $(CORE_OBJS) $(LIB_OBJS) $(USER_LIB_OBJS)
+	$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(USER_LIB_OBJS)
 
 # Building arduino binary image
 
@@ -140,4 +165,4 @@ upload: $(HEX)
 	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b 115200 -U flash:w:$<
 
 clean:
-	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs
+	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs $(OBJDIR)/userlibs
