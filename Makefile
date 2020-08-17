@@ -126,7 +126,7 @@ $(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH)/%.S
 $(CORE_LIB): $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS)
 	$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
 
-# Building arduino binari image
+# Building arduino binary image
 
 $(BIN): $(SRC) $(CORE_LIB)
 	$(CXX) $(INCLUDES) $(SYS_INCLUDES) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
