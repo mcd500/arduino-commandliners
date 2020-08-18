@@ -156,7 +156,7 @@ $(HEX): $(BIN)
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 upload: $(HEX)
-	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b 115200 -U flash:w:$<
+	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b $(MONITOR_BAUDRATE) -U flash:w:$<
 
 clean:
 	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs $(OBJDIR)/userlibs
