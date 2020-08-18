@@ -1,12 +1,26 @@
 
 # Adjast for your board
+# Manually add them which Arduino IDE gives automotically
+
+## Uno 5V 16MHz
 AVR_FREQ ?= 16000000L
 MCU ?= atmega328p
-# Manually add them which Arduino IDE gives automotically
+VARIANT = standard
 ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR
+MONITOR_BAUDRATE = 115200
+AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
+
+## Pro Micro 5V 16MHz from SparkFun
+#AVR_FREQ ?= 16000000L
+#MCU ?= atmega32u4
+#ARDUINO_VAR_PATH := $(HOME)/.arduino15/packages/SparkFun/hardware/avr/1.1.13/variants
+#VARIANT = promicro
+#ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_MICRO -DARDUINO_ARCH_AVR \
+#	-DUSB_VID=0x1b4f -DUSB_PID=0x9206
+#MONITOR_BAUDRATE = 57600
+#AVRDUDE_PROGRAMMER = avr109
 
 MONITOR_PORT ?= /dev/ttyACM0
-MONITOR_BAUDRATE = 115200
 
 # List library names you only use in your sources
 ARDUINO_LIBS ?= SoftwareSerial
@@ -26,8 +40,7 @@ SHELL = /bin/bash -xue
 
 ARDUINO_DIR = /usr/share/arduino
 ARDUINO_CORE_PATH = /usr/share/arduino/hardware/arduino/cores/arduino
-ARDUINO_VAR_PATH = /usr/share/arduino/hardware/arduino/variants
-VARIANT = standard
+ARDUINO_VAR_PATH ?= /usr/share/arduino/hardware/arduino/variants
 OBJDIR = .
 CORE_LIB = $(OBJDIR)/libcore.a
 
@@ -156,7 +169,8 @@ $(HEX): $(BIN)
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 upload: $(HEX)
-	avrdude -v -c arduino -p $(MCU) -P $(MONITOR_PORT) -b $(MONITOR_BAUDRATE) -U flash:w:$<
+	ard-reset-arduino --caterina --verbose $(MONITOR_PORT)
+	avrdude -V -D -v -c $(AVRDUDE_PROGRAMMER) -p $(MCU) -P $(MONITOR_PORT) -b $(MONITOR_BAUDRATE) -U flash:w:$<:i
 
 clean:
 	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/libs $(OBJDIR)/platformlibs $(OBJDIR)/userlibs
