@@ -20,7 +20,9 @@ AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 #MONITOR_BAUDRATE = 57600
 #AVRDUDE_PROGRAMMER = avr109
 
+## Select the serial port for your board
 MONITOR_PORT ?= /dev/ttyACM0
+#MONITOR_PORT ?= /dev/ttyUSB0
 
 # List library names you only use in your sources
 ARDUINO_LIBS ?= SoftwareSerial
