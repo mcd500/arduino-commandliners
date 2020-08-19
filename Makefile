@@ -7,6 +7,7 @@ AVR_FREQ ?= 16000000L
 MCU ?= atmega328p
 VARIANT = standard
 ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR
+MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 
@@ -17,11 +18,12 @@ AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 #VARIANT = promicro
 #ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_MICRO -DARDUINO_ARCH_AVR \
 #	-DUSB_VID=0x1b4f -DUSB_PID=0x9206
+#MONITOR_PORT ?= /dev/ttyUSB0
 #MONITOR_BAUDRATE = 57600
 #AVRDUDE_PROGRAMMER = avr109
 
 ## Select the serial port for your board
-MONITOR_PORT ?= /dev/ttyACM0
+#MONITOR_PORT ?= /dev/ttyACM0
 #MONITOR_PORT ?= /dev/ttyUSB0
 
 # List library names you only use in your sources
