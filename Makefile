@@ -22,6 +22,15 @@ AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 #MONITOR_BAUDRATE = 57600
 #AVRDUDE_PROGRAMMER = avr109
 
+## Pro Mini 5V 16MHz
+#AVR_FREQ ?= 16000000L
+#MCU ?= atmega328p
+#VARIANT = standard
+#ARD_CFLAGS := -DARDUINO=10813 -DARDUINO_AVR_PRO -DARDUINO_ARCH_AVR
+#MONITOR_PORT ?= /dev/ttyUSB0
+#MONITOR_BAUDRATE = 57600
+#AVRDUDE_PROGRAMMER = arduino
+
 ## Select the serial port for your board
 #MONITOR_PORT ?= /dev/ttyACM0
 #MONITOR_PORT ?= /dev/ttyUSB0
