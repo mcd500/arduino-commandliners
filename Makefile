@@ -171,7 +171,7 @@ $(HEX): $(BIN)
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 upload: $(HEX)
-	ard-reset-arduino --caterina --verbose $(MONITOR_PORT)
+	stty -F $(MONITOR_PORT) 1200; sleep 1
 	avrdude -V -D -v -c $(AVRDUDE_PROGRAMMER) -p $(MCU) -P $(MONITOR_PORT) -b $(MONITOR_BAUDRATE) -U flash:w:$<:i
 
 clean:
