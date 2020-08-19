@@ -47,13 +47,15 @@ TARGET := example
 BIN := $(TARGET).bin
 HEX := $(TARGET).hex
 
+# Change them where Arduino IDE is installed
+ARDUINO_DIR = $(HOME)/projects/arduino-1.8.13-linux64/arduino-1.8.13
+ARDUINO_CORE_PATH = $(ARDUINO_DIR)/hardware/arduino/avr/cores/arduino
+ARDUINO_VAR_PATH ?= $(ARDUINO_DIR)/hardware/arduino/avr/variants
+
 # Only have to edit above
 # Others below are for building and linking libraries automatically.
 #SHELL = /bin/bash -xue
 
-ARDUINO_DIR = /usr/share/arduino
-ARDUINO_CORE_PATH = /usr/share/arduino/hardware/arduino/cores/arduino
-ARDUINO_VAR_PATH ?= /usr/share/arduino/hardware/arduino/variants
 OBJDIR = .
 CORE_LIB = $(OBJDIR)/libcore.a
 
@@ -79,9 +81,12 @@ LOCAL_SRCS      = $(LOCAL_C_SRCS)   $(LOCAL_CPP_SRCS) \
                 $(LOCAL_CC_SRCS)   $(LOCAL_PDE_SRCS) \
                 $(LOCAL_INO_SRCS) $(LOCAL_AS_SRCS)
 
-ARDUINO_LIB_PATH = $(ARDUINO_DIR)/libraries
+ARDUINO_LIB_PATH1 = $(ARDUINO_DIR)/libraries
+ARDUINO_LIB_PATH2 = $(ARDUINO_DIR)/hardware/arduino/avr/libraries
 
-ARDUINO_LIBS += $(filter $(notdir $(wildcard $(ARDUINO_DIR)/libraries/*)), \
+ARDUINO_LIBS += $(filter $(notdir $(wildcard $(ARDUINO_LIB_PATH1)/*)), \
+	$(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
+ARDUINO_LIBS += $(filter $(notdir $(wildcard $(ARDUINO_LIB_PATH2)/*)), \
 	$(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
 ARDUINO_LIBS += $(filter $(notdir $(wildcard $(USER_LIB_PATH)/*)), \
 	$(shell sed -ne 's/^ *\# *include *[<\"]\(.*\)\.h[>\"]/\1/p' $(LOCAL_SRCS)))
@@ -89,8 +94,10 @@ ARDUINO_LIBS += $(filter $(notdir $(wildcard $(USER_LIB_PATH)/*)), \
 USER_LIBS      := $(sort $(wildcard $(patsubst %,$(USER_LIB_PATH)/%,$(ARDUINO_LIBS))))
 USER_LIB_NAMES := $(patsubst $(USER_LIB_PATH)/%,%,$(USER_LIBS))
 
-SYS_LIBS       := $(sort $(wildcard $(patsubst %,$(ARDUINO_LIB_PATH)/%,$(filter-out $(USER_LIB_NAMES),$(ARDUINO_LIBS)))))
-SYS_LIB_NAMES  := $(patsubst $(ARDUINO_LIB_PATH)/%,%,$(SYS_LIBS))
+SYS_LIBS       := $(sort $(wildcard $(patsubst %,$(ARDUINO_LIB_PATH1)/%,$(filter-out $(USER_LIB_NAMES),$(ARDUINO_LIBS)))))
+SYS_LIBS       += $(sort $(wildcard $(patsubst %,$(ARDUINO_LIB_PATH2)/%,$(filter-out $(USER_LIB_NAMES),$(ARDUINO_LIBS)))))
+SYS_LIB_NAMES  := $(patsubst $(ARDUINO_LIB_PATH1)/%,%,$(SYS_LIBS))
+SYS_LIB_NAMES  += $(patsubst $(ARDUINO_LIB_PATH2)/%,%,$(SYS_LIBS))
 
 get_library_includes = $(if $(and $(wildcard $(1)/src), $(wildcard $(1)/library.properties)), \
 	-I$(1)/src, \
@@ -127,6 +134,8 @@ $(OBJDIR)/core/%.S.o: $(ARDUINO_CORE_PATH)/%.S $(COMMON_DEPS) | $(OBJDIR)
 
 CORE_OBJS = $(patsubst $(ARDUINO_CORE_PATH)/%, $(OBJDIR)/core/%,$(CORE_OBJ_FILES))
 
+rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+
 get_library_files  = $(if $(and $(wildcard $(1)/src), $(wildcard $(1)/library.properties)), \
 	$(call rwildcard,$(1)/src/,*.$(2)), \
 	$(wildcard $(1)/*.$(2) $(1)/utility/*.$(2)))
@@ -138,23 +147,39 @@ USER_LIB_CPP_SRCS   := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(l
 USER_LIB_C_SRCS     := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(lib),c))
 USER_LIB_AS_SRCS    := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(lib),S))
 
-LIB_OBJS = $(patsubst $(ARDUINO_LIB_PATH)/%.c,$(OBJDIR)/libs/%.c.o,$(LIB_C_SRCS)) \
-	$(patsubst $(ARDUINO_LIB_PATH)/%.cpp,$(OBJDIR)/libs/%.cpp.o,$(LIB_CPP_SRCS)) \
-	$(patsubst $(ARDUINO_LIB_PATH)/%.S,$(OBJDIR)/libs/%.S.o,$(LIB_AS_SRCS))
+LIB_OBJS = $(patsubst $(ARDUINO_LIB_PATH1)/%.c,$(OBJDIR)/libs/%.c.o,$(LIB_C_SRCS)) \
+	$(patsubst $(ARDUINO_LIB_PATH1)/%.cpp,$(OBJDIR)/libs/%.cpp.o,$(LIB_CPP_SRCS)) \
+	$(patsubst $(ARDUINO_LIB_PATH1)/%.S,$(OBJDIR)/libs/%.S.o,$(LIB_AS_SRCS))
+
+LIB_OBJS += $(patsubst $(ARDUINO_LIB_PATH2)/%.c,$(OBJDIR)/libs/%.c.o,$(LIB_C_SRCS)) \
+	$(patsubst $(ARDUINO_LIB_PATH2)/%.cpp,$(OBJDIR)/libs/%.cpp.o,$(LIB_CPP_SRCS)) \
+	$(patsubst $(ARDUINO_LIB_PATH2)/%.S,$(OBJDIR)/libs/%.S.o,$(LIB_AS_SRCS))
 
 USER_LIB_OBJS = $(patsubst $(USER_LIB_PATH)/%.cpp,$(OBJDIR)/userlibs/%.cpp.o,$(USER_LIB_CPP_SRCS)) \
 	$(patsubst $(USER_LIB_PATH)/%.c,$(OBJDIR)/userlibs/%.c.o,$(USER_LIB_C_SRCS)) \
 	$(patsubst $(USER_LIB_PATH)/%.S,$(OBJDIR)/userlibs/%.S.o,$(USER_LIB_AS_SRCS))
 
-$(OBJDIR)/libs/%.c.o: $(ARDUINO_LIB_PATH)/%.c
+$(OBJDIR)/libs/%.c.o: $(ARDUINO_LIB_PATH1)/%.c
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
 
-$(OBJDIR)/libs/%.cpp.o: $(ARDUINO_LIB_PATH)/%.cpp
+$(OBJDIR)/libs/%.cpp.o: $(ARDUINO_LIB_PATH1)/%.cpp
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS_STD) $< -o $@
 
-$(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH)/%.S
+$(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH1)/%.S
+	@$(MKDIR) $(dir $@)
+	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
+
+$(OBJDIR)/libs/%.c.o: $(ARDUINO_LIB_PATH2)/%.c
+	@$(MKDIR) $(dir $@)
+	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
+
+$(OBJDIR)/libs/%.cpp.o: $(ARDUINO_LIB_PATH2)/%.cpp
+	@$(MKDIR) $(dir $@)
+	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS_STD) $< -o $@
+
+$(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH2)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
