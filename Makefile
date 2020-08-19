@@ -38,7 +38,7 @@ HEX := $(TARGET).hex
 
 # Only have to edit above
 # Others below are for building and linking libraries automatically.
-SHELL = /bin/bash -xue
+#SHELL = /bin/bash -xue
 
 ARDUINO_DIR = /usr/share/arduino
 ARDUINO_CORE_PATH = /usr/share/arduino/hardware/arduino/cores/arduino
