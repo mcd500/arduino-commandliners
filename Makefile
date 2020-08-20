@@ -185,11 +185,11 @@ $(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH2)/%.S
 
 $(OBJDIR)/userlibs/%.cpp.o: $(USER_LIB_PATH)/%.cpp
 	@$(MKDIR) $(dir $@)
-	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS_STD) $< -o $@
 
 $(OBJDIR)/userlibs/%.c.o: $(USER_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS_STD) $< -o $@
 
 $(OBJDIR)/userlibs/%.S.o: $(USER_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
