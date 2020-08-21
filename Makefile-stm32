@@ -9,6 +9,7 @@ ISAFLAGS  = -mcpu=$(MCU) -mfpu=$(FPU) -mfloat-abi=hard -mthumb
 VARIANT = NUCLEO_F4x1RE
 HAL_SRC = STM32F4xx
 ARD_CFLAGS := -DSTM32F4xx -DARDUINO=10813 -DARDUINO_NUCLEO_F411RE -DARDUINO_ARCH_STM32 -DBOARD_NAME="NUCLEO_F411RE" -DSTM32F411xE -DHAL_UART_MODULE_ENABLED
+MASS_OPTION = -O "NODE_F411RE,NUCLEO"
 MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
@@ -25,7 +26,8 @@ USER_LIB_PATH ?= $(HOME)/sketchbook/libraries
 SRC := main.cpp
 
 # File name of generated binary to upload to Arduino
-TARGET := example
+TARGET := uploadimg
+ELF := $(TARGET).elf
 BIN := $(TARGET).bin
 HEX := $(TARGET).hex
 
@@ -35,7 +37,8 @@ ARM_GCC_PATH := $(HOME)/.arduino15/packages/STM32/tools/xpack-arm-none-eabi-gcc/
 ARDUINO_DIR = $(HOME)/.arduino15/packages/STM32/hardware/stm32/1.9.0
 ARDUINO_CORE_PATH = $(ARDUINO_DIR)/cores/arduino
 ARDUINO_VAR_PATH ?= $(ARDUINO_DIR)/variants
-TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools/CMSIS/5.5.1
+TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
+CMSIS_DIR = $(TOOLS_DIR)/CMSIS/5.5.1
 
 # Only have to edit above
 # Others below are for building and linking libraries automatically.
@@ -50,8 +53,9 @@ CC := $(ARM_GCC_PATH)/arm-none-eabi-gcc
 CXX := $(ARM_GCC_PATH)/arm-none-eabi-g++
 OBJCOPY := $(ARM_GCC_PATH)/arm-none-eabi-objcopy
 AR := $(ARM_GCC_PATH)/arm-none-eabi-gcc-ar
+MASS_TOOL := $(TOOLS_DIR)/STM32Tools/1.4.0/tools/linux/massStorageCopy.sh
 
-all: $(CORE_LIB) $(BIN) $(HEX)
+all: $(CORE_LIB) $(ELF) $(BIN) $(HEX)
 
 CFLAGS_STD = -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500
 CXXFLAGS_STD = -std=gnu++14 -ffunction-sections -fdata-sections -nostdlib -fno-threadsafe-statics --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -fno-use-cxa-atexit
@@ -129,8 +133,8 @@ CORE_INCLUDES += -I$(ARDUINO_CORE_PATH)/stm32/OpenAMP
 CORE_INCLUDES += -I$(ARDUINO_CORE_PATH)/stm32/usb/hid
 CORE_INCLUDES += -I$(ARDUINO_CORE_PATH)/stm32/usb/cdc
 
-TOOL_INC_PATH  = -I$(TOOLS_DIR)/CMSIS/Core/Include
-TOOL_INC_PATH += -I$(TOOLS_DIR)/CMSIS/DSP/Include
+TOOL_INC_PATH  = -I$(CMSIS_DIR)/CMSIS/Core/Include
+TOOL_INC_PATH += -I$(CMSIS_DIR)/CMSIS/DSP/Include
 
 INCLUDES = $(ARD_CFLAGS) $(CORE_INCLUDES) $(SYS_INCLUDES) $(HAL_INCLUDES) \
 	   $(TOOL_INC_PATH) $(USER_INCLUDES) \
@@ -227,22 +231,24 @@ $(OBJDIR)/userlibs/%.S.o: $(USER_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-LDFLAGS = $(ISAFLAGS) -Os --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=0 -Wl,--defsym=LD_MAX_SIZE=524288 -Wl,--defsym=LD_MAX_DATA_SIZE=131072 -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--default-script=$(ARDUINO_DIR)/variants/$(VARIANT)/ldscript.ld -Wl,--script=$(ARDUINO_DIR)/system/ldscript.ld -L$(TOOLS_DIR)/CMSIS/DSP/Lib/GCC/ -larm_cortexM4lf_math -Wl,--start-group
+LDFLAGS = $(ISAFLAGS) -Os --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=0 -Wl,--defsym=LD_MAX_SIZE=524288 -Wl,--defsym=LD_MAX_DATA_SIZE=131072 -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--default-script=$(ARDUINO_DIR)/variants/$(VARIANT)/ldscript.ld -Wl,--script=$(ARDUINO_DIR)/system/ldscript.ld -L$(CMSIS_DIR)/CMSIS/DSP/Lib/GCC/ -larm_cortexM4lf_math -Wl,--start-group
 
 $(CORE_LIB): $(VAL_OBJS) $(CORE_OBJS) $(HAL_OBJS) $(DRV_OBJS) $(LIB_OBJS) $(USER_LIB_OBJS)
 	$(AR) rcs $@ $^
 
 # Building arduino binary image
 
-$(BIN): $(SRC) $(CORE_LIB)
+$(ELF): $(SRC) $(CORE_LIB)
 	$(CC) $(INCLUDES) $(LDFLAGS) $^ -lc -Wl,--end-group -lm -lgcc -lstdc++ -o $@
 
-$(HEX): $(BIN)
+$(BIN): $(ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(HEX): $(ELF)
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
-upload: $(HEX)
-#	stty -F $(MONITOR_PORT) 1200; sleep 1
-#	avrdude -V -D -v -c $(AVRDUDE_PROGRAMMER) -p $(MCU) -P $(MONITOR_PORT) -b $(MONITOR_BAUDRATE) -U flash:w:$<:i
+upload-mass: $(BIN)
+	$(MASS_TOOL) -I $< $(MASS_OPTION)
 
 clean:
 	rm -fr $(BIN) $(HEX) $(CORE_LIB) $(OBJDIR)/core $(OBJDIR)/hal $(OBJDIR)/libs $(OBJDIR)/platformlibs $(OBJDIR)/userlibs
