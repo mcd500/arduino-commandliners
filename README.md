@@ -1,4 +1,4 @@
-# Arduino for commandliners
+# Arduino Makefiles for commandliners
 
 This project is providing Makefiles for using Arduino libraries which is small as possible.
 
