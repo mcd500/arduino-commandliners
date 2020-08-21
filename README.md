@@ -55,17 +55,16 @@ LICENSE  main.cpp  Makefiles   Makefiles-stm32
 
 The `Makefiles` is for AVR only. The `Makefiles-stm32` is for STM32 only.
 
-Typing from command line:
+For STM32, copying `Makefiles-stm32` to `Makefiles`:
 ```sh
-$ make
+$ cp Makefiles-stm32 Makefile
 ```
-will build a binary for AVR.
 
-For STM32, copying `Makefiles-stm32` to `Makefiles` and type `make` or:
+or:
 ```sh
-$ make -f  Makefiles-stm32
+$ make -f Makefiles-stm32
 ```
-will do.
+every time will do.
 
 
 ## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
@@ -153,6 +152,24 @@ MASS_OPTION = -O "NODE_F411RE,NUCLEO"
 
 ## Usage <a id="Usage"></a>
 
+
+After changing your sources, then typing from command line:
+```sh
+$ make
+```
+will build a binary.
+
+If you would like to write to your dev board every time after updating sources:
+```sh
+$ make upload
+```
+will build the sources and write to dev board consequently.
+
+It is bellow for mass storage method of writing binary to STM32:
+```sh
+$ make -f Makefile-stm32 upload-mass
+```
+
 ## Credits <a id="Credits"></a>
 
 The first initial Makefile was developed for the question at eevblog forum by @ksoviero.
@@ -166,4 +183,3 @@ The Makefile is derived from arduino-mk project. This is main reason for selecti
 Support more STM32 boards.
 Support serial mode writing for STM32.
 Would like to support RISC-V in the future.
-
