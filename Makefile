@@ -43,7 +43,8 @@ USER_LIB_PATH ?= $(HOME)/sketchbook/libraries
 SRC := main.cpp
 
 # File name of generated binary to upload to Arduino
-TARGET := example
+TARGET := uploadimg
+ELF := $(TARGET).elf
 BIN := $(TARGET).bin
 HEX := $(TARGET).hex
 
@@ -64,7 +65,7 @@ CXX := avr-g++
 OBJCOPY := avr-objcopy
 AR := avr-gcc-ar
 
-all: $(CORE_LIB) $(BIN) $(HEX)
+all: $(CORE_LIB) $(ELF) $(BIN) $(HEX)
 
 CFLAGS_STD = -std=gnu11 -flto -fno-fat-lto-objects
 CXXFLAGS_STD = -fpermissive -fno-exceptions -std=gnu++11 -fno-threadsafe-statics -flto
@@ -199,10 +200,13 @@ $(CORE_LIB): $(CORE_OBJS) $(LIB_OBJS) $(USER_LIB_OBJS)
 
 # Building arduino binary image
 
-$(BIN): $(SRC) $(CORE_LIB)
+$(ELF): $(SRC) $(CORE_LIB)
 	$(CXX) $(INCLUDES) $(SYS_INCLUDES) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
-$(HEX): $(BIN)
+$(BIN): $(ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(HEX): $(ELF)
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 upload: $(HEX)
