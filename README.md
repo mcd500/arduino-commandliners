@@ -67,9 +67,9 @@ $ make -f Makefiles-stm32
 ```
 every time will do.
 
-Alternatively it is possible to copy individual Makefiles from links.
-[Makefile for AVR](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)
-[Makefile for STM32](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)
+Alternatively it is possible to copy individual Makefiles from links.  
+[Makefile for AVR](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)  
+[Makefile for STM32](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)  
 
 ## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
 
