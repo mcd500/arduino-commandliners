@@ -5,6 +5,7 @@
 ## NUCLEO-F411RE
 MCU ?= cortex-m4
 FPU ?= fpv4-sp-d16
+ISAFLAGS  = -mcpu=$(MCU) -mfpu=$(FPU) -mfloat-abi=hard -mthumb
 VARIANT = NUCLEO_F4x1RE
 HAL_SRC = STM32F4xx
 ARD_CFLAGS := -DSTM32F4xx -DARDUINO=10813 -DARDUINO_NUCLEO_F411RE -DARDUINO_ARCH_STM32 -DBOARD_NAME="NUCLEO_F411RE" -DSTM32F411xE -DHAL_UART_MODULE_ENABLED
@@ -135,8 +136,7 @@ INCLUDES = $(ARD_CFLAGS) $(CORE_INCLUDES) $(SYS_INCLUDES) $(HAL_INCLUDES) \
 	   $(TOOL_INC_PATH) $(USER_INCLUDES) \
 	   -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT)
 
-CPPFLAGS += -mcpu=$(MCU) -mfpu=$(FPU) -mfloat-abi=hard -mthumb
-CPPFLAGS += -Os $(INCLUDES)
+CPPFLAGS += $(ISAFLAGS) -Os $(INCLUDES)
 
 CORE_OBJ_FILES  = $(CORE_C_SRCS:.c=.c.o) $(CORE_CPP_SRCS:.cpp=.cpp.o) $(CORE_AS_SRCS:.S=.S.o)
 
@@ -227,7 +227,7 @@ $(OBJDIR)/userlibs/%.S.o: $(USER_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-LDFLAGS = -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Os --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=0 -Wl,--defsym=LD_MAX_SIZE=524288 -Wl,--defsym=LD_MAX_DATA_SIZE=131072 -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--default-script=/home/akirat/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_F4x1RE/ldscript.ld -Wl,--script=/home/akirat/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/ldscript.ld -L/home/akirat/.arduino15/packages/STM32/tools/CMSIS/5.5.1/CMSIS/DSP/Lib/GCC/ -larm_cortexM4lf_math -o example.bin -L/tmp/arduino_build_924672 -Wl,--start-group
+LDFLAGS = $(ISAFLAGS) -Os --specs=nano.specs -Wl,--defsym=LD_FLASH_OFFSET=0 -Wl,--defsym=LD_MAX_SIZE=524288 -Wl,--defsym=LD_MAX_DATA_SIZE=131072 -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--entry=Reset_Handler -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--default-script=$(ARDUINO_DIR)/variants/$(VARIANT)/ldscript.ld -Wl,--script=$(ARDUINO_DIR)/system/ldscript.ld -L$(TOOLS_DIR)/CMSIS/DSP/Lib/GCC/ -larm_cortexM4lf_math -Wl,--start-group
 
 $(CORE_LIB): $(VAL_OBJS) $(CORE_OBJS) $(HAL_OBJS) $(DRV_OBJS) $(LIB_OBJS) $(USER_LIB_OBJS)
 	$(AR) rcs $@ $^
