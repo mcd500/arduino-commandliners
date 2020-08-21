@@ -13,13 +13,15 @@ I have no intention to make this project to replace arduino-mk.
 
 ## Index
 
-Prerequisites
-Makefils for AVR and STM32
-Configuring Makefile
-Credits
-TODO
+ - [Prerequisites](#Prerequisites)
+ - [Makefils for AVR and STM32](#Makefile-which)
+ - [Configuring Makefiles to point installed Arduino](#Makefile-arduino)
+ - [Configuring Makefiles for dev boards](#Makefile-dev-baords)
+ - [Usage](#Usage)
+ - [Credits](#credits)
+ - [TODO](#TODO)
 
-## Prerequisites
+## Prerequisites <a id="Prerequisites"></a>
 
 *  Arduino IDE which comes with Arduino IDE for programming AVR
 *  Arduino_Core_STM32 for programming STM32
@@ -36,7 +38,7 @@ Link to how to install Arduino IDE (https://ubuntu.com/tutorials/install-the-ard
  (I have to replace `./install.sh` to `sudo ./install.sh` in the instruction in my case)
 Link to how to install Arduino_Core_STM32 (https://github.com/stm32duino/Arduino_Core_STM32)
 
-## Using Makefils for AVR and STM32
+## Using Makefils for AVR and STM32 <a id="Makefile-which"></a>
 
 First download Makefiles as bellow at the location where the main sources for your developments.
 ```sh
@@ -66,7 +68,7 @@ $ make -f  Makefiles-stm32
 will do.
 
 
-## Configuring Makefile where the arduino is installed
+## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
 
 Some lines in Makefile must be changed for where the arduino is installed.
 
@@ -97,7 +99,7 @@ TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
 CMSIS_DIR = $(HOME)/.arduino15/packages/STM32/tools/CMSIS/5.5.1
 ```
 
-## Configuring Makefile for target development board
+## Configuring Makefile for target development board  <a id="Makefile-dev-baords"></a>
 
 
 These are the lines to match the dev boards I have tested on AVR.
@@ -149,7 +151,9 @@ ARD_CFLAGS := -DSTM32F4xx -DARDUINO=10813 -DARDUINO_NUCLEO_F411RE -DARDUINO_ARCH
 MASS_OPTION = -O "NODE_F411RE,NUCLEO"
 ```
 
-## Credits
+## Usage <a id="Usage"></a>
+
+## Credits <a id="Credits"></a>
 
 The first initial Makefile was developed for the question at eevblog forum by @ksoviero.
 https://www.eevblog.com/forum/programming/i-dont-understand-libraries-in-c/
@@ -157,7 +161,7 @@ After my post at the forum, I spent about three days in my spare time and it bec
 
 The Makefile is derived from arduino-mk project. This is main reason for selecting GPL for this project.
 
-## TODO
+## TODO <a id="TODO"></a>
 
 Support more STM32 boards.
 Support serial mode writing for STM32.
