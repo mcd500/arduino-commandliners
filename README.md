@@ -6,7 +6,7 @@ The regular procedure to adopt development of Arduino to custom designed develop
 
 It is also beneficial who are constrained (or like) to use only an editor for developments or would like to understand how to build Arduino libraries with Makefiles.
 
-It is continent for engineers
+It is convenient for engineers who do not use only off-the-shelf boards.
 
 Currently supporting AVR and STM32 only.
 I have no intention to make this project to replace arduino-mk.
