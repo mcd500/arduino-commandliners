@@ -34,10 +34,12 @@ The Arduino_Core_STM32 must be installed for who programs stm32 as well but not 
 
 I do not have plan to supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
 
-Link to how to install Arduino IDE ([https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball](https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball))
+Link to how to install Arduino IDE  
+([https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball](https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball))  
  (I had to replace `./install.sh` to `sudo ./install.sh` in the instruction in my case.)
 
-Link to how to install Arduino_Core_STM32 ([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
+Link to how to install Arduino_Core_STM32  
+([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
 
 ## Using Makefils for AVR and STM32 <a id="Makefile-which"></a>
 
