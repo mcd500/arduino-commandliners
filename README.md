@@ -30,7 +30,7 @@ The latest Arduino IDE must be installed on development machine. (tested on 1.8.
 Only supports Linux for the host development PC.
 I only have tested on Ubuntu 18.04 at the moment.
 
-The Arduino_Core_STM32 must be installed for who programs stm32 as well but not required for who AVR only engineers.
+The Arduino_Core_STM32 must be installed for who programs stm32 as well but not required if it is AVR only purpose.
 
 I do not have plan to supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
 
@@ -45,7 +45,7 @@ First download Makefiles as bellow at the location where the main sources for yo
 $ git clone https://github.com/mcd500/arduino-commandliners.git
 ```
 
-If your sources have source file with the name `main.cpp` please rename it to other name before the above git cloning. The git repo include `main.cpp` for testing purpose of the arduino- commandliners.
+If your sources have a file name `main.cpp` please rename it to other name before the above git cloning to avoid being over written. Then over write it with your souce. The git repo include `main.cpp` for testing purpose of the arduino-commandliners.
 
 There will be two Makefiles.
 ```sh
