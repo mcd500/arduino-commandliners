@@ -1,0 +1,8 @@
+*.c.d
+*.cpp.d
+*.o
+core/
+hal/
+lib/
+userlib/
+arduino_build*/
