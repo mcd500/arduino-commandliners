@@ -188,6 +188,6 @@ The Makefile is derived from arduino-mk project. This is main reason for selecti
 
 ## TODO <a id="TODO"></a>
 
-Support more STM32 boards.
-Support serial mode writing for STM32.
-Would like to support RISC-V in the future.
+Support more STM32 boards.  
+Support serial mode writing for STM32.  
+Would like to support RISC-V in the future.  
