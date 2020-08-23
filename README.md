@@ -114,6 +114,7 @@ CMSIS_DIR = $(HOME)/.arduino15/packages/STM32/tools/CMSIS/5.5.1
 
 
 These are the lines to match the dev boards I have tested on AVR.
+For 3.3V 8MHz models, change the 'AVR_FREQ ?= 16000000L' to '8000000L'.
 
 * Uno 5V 16MHz
 ```
