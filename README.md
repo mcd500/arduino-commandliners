@@ -24,11 +24,14 @@ I have no intention to make this project to replace arduino-mk.
 ## Prerequisites <a id="Prerequisites"></a>
 
 *  Arduino IDE which comes with Arduino IDE for programming AVR
+*  SparkFun Arduino Boards Addon Files
 *  Arduino_Core_STM32 for programming STM32
 
 The latest Arduino IDE must be installed on development machine. (tested on 1.8.13)
 Only supports Linux for the host development PC.
 I only have tested on Ubuntu 18.04 at the moment.
+
+Arduino Pro Micro required addon files from SparkFun.
 
 The Arduino_Core_STM32 must be installed for who programs stm32 as well but not required if it is AVR only purpose.
 
@@ -37,6 +40,9 @@ I do not have plan to supporting Windows at the moment for keeping the Makefile 
 Link to how to install Arduino IDE  
 ([https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball](https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball))  
  (I had to replace `./install.sh` to `sudo ./install.sh` in the instruction in my case.)
+
+Link to how to install SparkFun Arduino Boards Addon Files  
+([https://github.com/sparkfun/Arduino_Boards](https://github.com/sparkfun/Arduino_Boards))
 
 Link to how to install Arduino_Core_STM32  
 ([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
