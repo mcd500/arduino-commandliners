@@ -44,8 +44,6 @@ CMSIS_DIR = $(TOOLS_DIR)/CMSIS/5.5.1
 OBJDIR = .
 CORE_LIB = $(OBJDIR)/libcore.a
 
-#INCLUDES = -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT)
-
 CC := $(ARM_GCC_PATH)/arm-none-eabi-gcc 
 CXX := $(ARM_GCC_PATH)/arm-none-eabi-g++
 OBJCOPY := $(ARM_GCC_PATH)/arm-none-eabi-objcopy
