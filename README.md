@@ -169,9 +169,10 @@ The `-DARDUINO_ARCH_AVR` must be defined to use some of the libraries.
 
 The `-DARDUINO_AVR_UNO` is not really needed, I put it there just because genuine Arduino adds it.
 
-The `AVRDUDE_PROGRAMMER` must have correct value each board for avrdude to upload the binary correctly.
-The values could be found from the upload.protocol in boards.txt. The boards.txt could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
+The `MONITOR_BAUDRATE` and `AVRDUDE_PROGRAMMER` must have the correct value on each board for avrdude to upload the binary correctly.
+The values could be found from the upload.protocol in `boards.txt`. The `boards.txt` could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
 
+The `MONITOR_PORT` may vary depend on the USB chip on the dev boards. The easiest way is to watch which appears when connecting the board under `/dev/` on your host machine. Most of the time the AVR Arduino boards are `/dev/ttyACM0` and `/dev/ttyUSB0` from other vendors.
 
 * Pro Micro 5V 16MHz from SparkFun
 ```
