@@ -14,6 +14,7 @@ I have no intention to make this project to replace arduino-mk.
 ## Index
 
  - [Prerequisites](#Prerequisites)
+ - [Basic flow](#Basic-flow)
  - [Makefils for AVR and STM32](#Makefile-which)
  - [Configuring Makefiles to point installed Arduino](#Makefile-arduino)
  - [Configuring Makefiles for dev boards](#Makefile-dev-baords)
@@ -26,6 +27,7 @@ I have no intention to make this project to replace arduino-mk.
 *  Arduino IDE which comes with Arduino IDE for programming AVR
 *  SparkFun Arduino Boards Addon Files
 *  Arduino_Core_STM32 for programming STM32
+*  Devlopment tools, gcc and etc for the cpu
 
 The latest Arduino IDE must be installed on development machine. (tested on 1.8.13)
 Only supports Linux for the host development PC.
@@ -47,37 +49,65 @@ Link to how to install SparkFun Arduino Boards Addon Files
 Link to how to install Arduino_Core_STM32  
 ([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
 
+These are the minimum packages required to build. (Only tested on Ubuntu at the moment)
+```sh
+$ sudo apt-get -y update
+$ sudo apt-get -y install apt-utils apt xz-utils wget git
+```
+
+For AVR:
+```sh
+$ sudo apt-get -y install binutils-avr gcc-avr avr-libc avrdude
+```
+
+For STM32:
+```sh
+$ sudo apt-get -y install gcc-arm-none-eabi binutils-arm-none-eabi
+$ sudo dpkg --add-architecture i386 && sudo apt-get update
+$ sudo apt install libusb-1.0.0:i386
+```
+
+## Basic flow of using Makefiles for Arduino libraries with no gui  <a id="Basic-flow"></a>
+
+  1. Download Makefile for your project
+  1. Customize the path where Arduino libraries are installed
+  1. Customize variables in Makefile for your dev boards
+  1. Build and upload
+
 ## Using Makefils for AVR and STM32 <a id="Makefile-which"></a>
 
 First download Makefiles as bellow at the location where the main sources for your developments.
+
+For AVR:
 ```sh
-$ git clone https://github.com/mcd500/arduino-commandliners.git
+$ wget https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile
 ```
 
-If your sources have a file name `main.cpp` please rename it to other name before the above git cloning to avoid being over written. Then over write it with your souce. The git repo include `main.cpp` for testing purpose of the arduino-commandliners.
-
-There will be two Makefiles.
+For STM32:
 ```sh
-$ ls
-LICENSE  main.cpp  Makefiles   Makefiles-stm32
+$ wget https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile-stm32
 ```
 
-The `Makefiles` is for AVR only. The `Makefiles-stm32` is for STM32 only.
+The `Makefile` is for AVR only. The `Makefile-stm32` is for STM32 only.
 
-For STM32, copying `Makefiles-stm32` to `Makefiles`:
+For STM32, copying `Makefile-stm32` to `Makefile`:
 ```sh
-$ cp Makefiles-stm32 Makefile
+$ cp Makefile-stm32 Makefile
 ```
+should be fine for most of the time, since building binaries for both AVR and STM32 is rare.
 
-or:
+If your project require to co-exist both, then:
 ```sh
-$ make -f Makefiles-stm32
+$ make -f Makefile-stm32
 ```
-every time will do.
+every time will do with having two different Makefiles.
 
-Alternatively it is possible to copy individual Makefiles from links.  
-[Makefile for AVR](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)  
-[Makefile for STM32](https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/Makefile)  
+The one of the source files must be `main.cpp` since Arduino libraries expect to be called from c++.
+
+I have prepared `main.cpp` for testing Makefiles in later procedure. It just an example of blinking led from Arduino porject.
+```sh
+$ wget https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/main.cpp
+```
 
 ## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
 
