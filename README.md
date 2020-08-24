@@ -36,14 +36,14 @@ The Arduino_Core_STM32 must be installed for who programs stm32 as well but not 
 
 I do not have a plan supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
 
-Link to how to install Arduino IDE  
+Link to how to install Arduino IDE:  
 ([https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball](https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball))  
  (I had to replace `./install.sh` to `sudo ./install.sh` in the instruction in my case.)
 
-Link to how to install SparkFun Arduino Boards Addon Files  
+Link to how to install SparkFun Arduino Boards Addon Files:  
 ([https://github.com/sparkfun/Arduino_Boards](https://github.com/sparkfun/Arduino_Boards))
 
-Link to how to install Arduino_Core_STM32  
+Link to how to install Arduino_Core_STM32i:  
 ([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
 
 These are the minimum packages required to build. (Only tested on Ubuntu at the moment)
@@ -184,9 +184,9 @@ AVRDUDE_PROGRAMMER = avr109
 ```
 
 The Pro Mirco is from SkarkFun. It have to modify `ARDUINO_VAR_PATH`. Any boards added `Additional Boards Manager URLs` at `File -> Preferences`, they are added to `.arduino15/packages/` with `Providers name/hardsare`, such as `SparkFun/hardware`.
-Look inside the `${HOME}/.arduino15/packages/SparkFun/hardware` and search the directory `variants`. 
+Look inside the `${HOME}/.arduino15/packages/SparkFun/hardware` and search for the directory `variants`.
 
-There will be directory `promicro` and it will be for the `VARIANT`.
+There will be a directory `promicro` to match the board to set as `VARIANT`.
 
 Same way is possible to user for the boards from any other vendors.
 
