@@ -111,11 +111,13 @@ $ wget https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/mai
 
 ## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
 
-Some lines in Makefile must be changed for where the arduino is installed.
+Some lines in Makefile must be changed for where the arduino is installed. This is my example.
 
 ```
 ARDUINO_DIR = $(HOME)/projects/arduino-1.8.13-linux64/arduino-1.8.13
 ```
+
+Change the portion of `1.8.13` with the Arduino version.
 
 The ARDUINO_DIR have to be pointing the directory where following files after untar the arduino-1.8.13-linux64.tar.xz.
 ```sh
@@ -133,6 +135,8 @@ TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
 CMSIS_DIR = $(TOOLS_DIR)/CMSIS/5.5.1
 ```
 
+The `9.2.1-1.1` and `5.5.1` differs depend on the Arduino version.
+
 Typically additional packages of `STM32` and  `CMSIS` are installed in location bellow after installing procedure of Arduino_Core_STM32.
 
 ```
@@ -142,9 +146,7 @@ CMSIS_DIR = $(HOME)/.arduino15/packages/STM32/tools/CMSIS/5.5.1
 
 ## Configuring Makefile for target development board  <a id="Makefile-dev-baords"></a>
 
-
-These are the lines to match the dev boards I have tested on AVR.
-For 3.3V 8MHz models, change the 'AVR_FREQ ?= 16000000L' to '8000000L'.
+These are the lines to match the dev boards, which I have tested on AVR. For 3.3V 8MHz models, change the `AVR_FREQ ?= 16000000L` to `8000000L`.
 
 * Uno 5V 16MHz
 ```
@@ -156,6 +158,20 @@ MONITOR_PORT ?= /dev/ttyACM0
 MONITOR_BAUDRATE = 115200
 AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 ```
+
+The MCU could be chosen from `atmega32u4 atmega328p atmega168 atmega2560 atmega1280 atmegang atmega8 attiny85`.
+
+The values to select the VARIANT are listed at  `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
+
+It have to have Arduino version in `-DARDUINO=10813` at `ARD_CFLAGS`. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
+
+The `-DARDUINO_ARCH_AVR` must be defined to use some of the libraries.
+
+The `-DARDUINO_AVR_UNO -` is not really needed, I put it there just because genuine Arduino adds it.
+
+The `AVRDUDE_PROGRAMMER` must have correct value each board for avrdude to upload the binary correctly.
+The values could be found from the upload.protocol in boards.txt. The boards.txt could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
+
 
 * Pro Micro 5V 16MHz from SparkFun
 ```
