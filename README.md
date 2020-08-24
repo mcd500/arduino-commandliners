@@ -67,7 +67,7 @@ $ sudo dpkg --add-architecture i386 && sudo apt-get update
 $ sudo apt install libusb-1.0.0:i386
 ```
 
-## Basic flow of using Makefiles for Arduino libraries with no gui  <a id="Basic-flow"></a>
+## Basic flow of using Makefiles for Arduino libraries without using GUI  <a id="Basic-flow"></a>
 
   1. Download Makefile for your project
   1. Customize the path where Arduino libraries are installed
