@@ -34,7 +34,7 @@ Arduino Pro Micro required addon files from SparkFun.
 
 The Arduino_Core_STM32 must be installed for who programs stm32 as well but not required if it is AVR only purpose.
 
-I do not have plan to supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
+I do not have a plan supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
 
 Link to how to install Arduino IDE  
 ([https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball](https://ubuntu.com/tutorials/install-the-arduino-ide#2-installing-via-a-tarball))  
@@ -116,7 +116,7 @@ ARDUINO_DIR = $(HOME)/projects/arduino-1.8.13-linux64/arduino-1.8.13
 
 Change the portion of `1.8.13` with the Arduino version.
 
-The ARDUINO_DIR have to be pointing the directory where following files after untar the arduino-1.8.13-linux64.tar.xz.
+The `ARDUINO_DIR` have to be pointing the directory where following files after untar the arduino-1.8.13-linux64.tar.xz.
 ```sh
 $ ls
 arduino                 examples    java       reference      tools-builder
@@ -124,7 +124,7 @@ arduino-builder         hardware    lib        revisions.txt  uninstall.sh
 arduino-linux-setup.sh  install.sh  libraries  tools
 ```
 
-More lines are required to change for STM32 in Makefile-stm32.
+Some more lines to modify for STM32 in Makefile-stm32.
 
 ```
 ARM_GCC_PATH := $(HOME)/.arduino15/packages/STM32/tools/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/
@@ -132,9 +132,9 @@ TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
 CMSIS_DIR = $(TOOLS_DIR)/CMSIS/5.5.1
 ```
 
-The `9.2.1-1.1` and `5.5.1` differs depend on the Arduino version.
+The `9.2.1-1.1` and `5.5.1` differs depending on the Arduino version.
 
-Typically additional packages of `STM32` and  `CMSIS` are installed in location bellow after installing procedure of Arduino_Core_STM32.
+Typically additional packages of `STM32` and  `CMSIS` are in locations bellow after following install procedure of Arduino_Core_STM32.
 
 ```
 TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
@@ -160,7 +160,7 @@ The MCU could be chosen from `atmega32u4 atmega328p atmega168 atmega2560 atmega1
 
 The values to select the `VARIANT` are directory name in `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
 
-It have to have Arduino version in `-DARDUINO=10813` at `ARD_CFLAGS`. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
+It must to have Arduino version as `-DARDUINO=10813` in `ARD_CFLAGS`. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
 
 The `-DARDUINO_ARCH_AVR` must be defined to use some of the libraries.
 
