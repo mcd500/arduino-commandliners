@@ -185,6 +185,13 @@ MONITOR_BAUDRATE = 57600
 AVRDUDE_PROGRAMMER = avr109
 ```
 
+The Pro Mirco is from SkarkFun. It have to modify `ARDUINO_VAR_PATH`. Any boards added `Additional Boards Manager URLs` at `File -> Preferences`, they are added to `.arduino15/packages/` with `Providers name/hardsare`, such as `SparkFun/hardware`.
+Look inside the `${HOME}/.arduino15/packages/SparkFun/hardware` and search the directory `variants`. 
+
+There will be directory `promicro` and it will be for the `VARIANT`.
+
+Same way is possible to user for the boards from any other vendors.
+
 * Pro Mini 5V 16MHz
 ```
 AVR_FREQ ?= 16000000L
