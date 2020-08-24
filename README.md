@@ -1,15 +1,12 @@
 # Arduino Makefiles for commandliners
 
-This project is providing Makefiles for using Arduino libraries which is small as possible.
+This project is to provide Makefiles which are small as possible for using Arduino libraries.
 
-The regular procedure to adopt development of Arduino to custom designed development boards require revising `boards.txt` for the new dev boards. It is aiming to be able to adopt your own new board by changing few lines in Makefile.
+The regular procedure to adopt development of Arduino to custom designed development boards require revising boards.txt to match new dev boards. In this project it is aiming to be able to adopt your own new board by changing few lines in Makefile. It is convenient for engineers who are not using only off-the-shelf boards.
 
 It is also beneficial who are constrained (or like) to use only an editor for developments or would like to understand how to build Arduino libraries with Makefiles.
 
-It is convenient for engineers who do not use only off-the-shelf boards.
-
-Currently supporting AVR and STM32 only.
-I have no intention to make this project to replace arduino-mk.
+Currently supporting AVR and STM32 only. I have no intention to make this project to replace arduino-mk.
 
 ## Index
 
