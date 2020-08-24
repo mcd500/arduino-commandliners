@@ -38,6 +38,7 @@ TOOLS_DIR = $(HOME)/.arduino15/packages/STM32/tools
 CMSIS_DIR = $(TOOLS_DIR)/CMSIS/5.5.1
 
 # Only have to edit above
+#############################################################################
 # Others below are for building and linking libraries automatically.
 #SHELL = /bin/bash -xue
 

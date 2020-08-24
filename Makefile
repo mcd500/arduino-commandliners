@@ -54,6 +54,7 @@ ARDUINO_CORE_PATH = $(ARDUINO_DIR)/hardware/arduino/avr/cores/arduino
 ARDUINO_VAR_PATH ?= $(ARDUINO_DIR)/hardware/arduino/avr/variants
 
 # Only have to edit above
+#############################################################################
 # Others below are for building and linking libraries automatically.
 #SHELL = /bin/bash -xue
 
