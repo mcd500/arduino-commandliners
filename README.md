@@ -226,7 +226,7 @@ $ make upload
 ```
 will build the sources and write to dev board consequently.
 
-It is bellow for mass storage method of writing binary to STM32:
+Use bellow for mass storage method of writing binary to STM32:
 ```sh
 $ make -f Makefile-stm32 upload-mass
 ```
