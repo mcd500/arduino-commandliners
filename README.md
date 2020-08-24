@@ -161,13 +161,13 @@ AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 
 The MCU could be chosen from `atmega32u4 atmega328p atmega168 atmega2560 atmega1280 atmegang atmega8 attiny85`.
 
-The values to select the VARIANT are listed at  `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
+The values to select the `VARIANT` are directory name in `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
 
 It have to have Arduino version in `-DARDUINO=10813` at `ARD_CFLAGS`. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
 
 The `-DARDUINO_ARCH_AVR` must be defined to use some of the libraries.
 
-The `-DARDUINO_AVR_UNO -` is not really needed, I put it there just because genuine Arduino adds it.
+The `-DARDUINO_AVR_UNO` is not really needed, I put it there just because genuine Arduino adds it.
 
 The `AVRDUDE_PROGRAMMER` must have correct value each board for avrdude to upload the binary correctly.
 The values could be found from the upload.protocol in boards.txt. The boards.txt could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
