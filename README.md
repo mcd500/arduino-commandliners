@@ -2,7 +2,7 @@
 
 Makefiles which are small as possible for using Arduino libraries.
 
-The regular procedure to adopt custom designed development boards to Arduino require revising boards.txt to match the new dev boards. In this project it is aiming to be able to adopt your own new board by changing few lines in Makefile. It is convenient for engineers who are not using only off-the-shelf boards.
+The regular procedure of adopting custom designed development boards on Arduino is revising boards.txt to match the new dev boards. In this project it is aiming to be able to adopt your own new board by changing few lines in Makefile. It is convenient for engineers who are not using only off-the-shelf boards.
 
 It is also beneficial who are constrained (or like) to use only an editor for developments or would like to understand how to build Arduino libraries with Makefiles.
 
@@ -242,7 +242,7 @@ $ make -f Makefile-stm32 upload-mass
 
 ### How to connect Arduino Pro Mini with use-serial for uploading image <a id="promicro-usb-serial"></a>
 
-I used a ftdi usb serial/UART converter cable. Any usb serial boards are fine connecting wires as described in the pictures:  
+I used a ftdi usb serial/UART converter cable. Any usb serial boards are fine connecting wires as described in the second pictures:  
 
 | USB-UART | Target board |
 |----------|----------|
