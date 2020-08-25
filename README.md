@@ -242,9 +242,13 @@ $ make -f Makefile-stm32 upload-mass
 
 ### How to connect Arduino Pro Mini with use-serial for uploading image <a id="promicro-usb-serial"></a>
 
-I used a ftdi usb serial converter cable. Any usb serial boards are fine connecting wires as it is in the pictures.
+I used a ftdi usb serial converter cable. Any usb serial boards are fine connecting wires as described in the pictures:  
+GRN-GRN, 5V-VCC, TXD-RXD, RXD-TXD and RTS-DTR.  
+The CTS from usb-serial is not used.
 
-<img src="imgs/Mini-Pro-connection-1.jpg" height="180"> <img src="imgs/pro-mini-usb-serial-connection-1.jpg" height="180"> <img src="imgs/pro-mini-upload-ok-1.png" height="180">
+Use 3.3V usb-serial boards instead of 5V when the target boards is for 3.3V.
+
+<img src="imgs/Mini-Pro-connection-1.jpg" height="180"> <img src="imgs/pro-mini-usb-serial-connection-2.jpg" height="180"> <img src="imgs/pro-mini-upload-ok-1.png" height="180">
 
 ## Credits <a id="Credits"></a>
 
