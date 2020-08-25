@@ -16,6 +16,7 @@ Currently supporting AVR and STM32 only. I have no intention to make this projec
  - [Configuring Makefiles to point installed Arduino](#Makefile-arduino)
  - [Configuring Makefiles for dev boards](#Makefile-dev-baords)
  - [Usage](#Usage)
+ - [Appendix](#Appendix)
  - [Credits](#credits)
  - [TODO](#TODO)
 
@@ -199,6 +200,9 @@ MONITOR_BAUDRATE = 57600
 AVRDUDE_PROGRAMMER = arduino
 ```
 
+See [how to connect UART to PC](#promicro-usb-serial).
+Most of the boards are `MONITOR_BAUDRATE = 57600`.
+
 For STM32 in Makefile-stm32.
 
 * NUCLEO-F411RE
@@ -233,6 +237,14 @@ Use bellow for mass storage method of writing binary to STM32:
 ```sh
 $ make -f Makefile-stm32 upload-mass
 ```
+
+## Appendix <a id="Appendix"></a>
+
+### How to connect Pro Mini with use-serial for upload image <a id="promicro-usb-serial"></a>
+
+I used ftdi usb serial converter cable. Any usb serial boards are fine connecting wires in the pictures.
+
+<img src="imgs/Mini-Pro-connection-1.jpg" height="100"> <img src="imgs/pro-mini-usb-serial-connection-1.jpg" height="100"> <img src="imgs/pro-mini-upload-ok-1.png" height="100">
 
 ## Credits <a id="Credits"></a>
 
