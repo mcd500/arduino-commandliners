@@ -1,8 +1,8 @@
 # Arduino Makefiles for commandliners
 
-This project is to provide Makefiles which are small as possible for using Arduino libraries.
+Makefiles which are small as possible for using Arduino libraries.
 
-The regular procedure to adopt development of Arduino to custom designed development boards require revising boards.txt to match new dev boards. In this project it is aiming to be able to adopt your own new board by changing few lines in Makefile. It is convenient for engineers who are not using only off-the-shelf boards.
+The regular procedure to adopt custom designed development boards to Arduino require revising boards.txt to match the new dev boards. In this project it is aiming to be able to adopt your own new board by changing few lines in Makefile. It is convenient for engineers who are not using only off-the-shelf boards.
 
 It is also beneficial who are constrained (or like) to use only an editor for developments or would like to understand how to build Arduino libraries with Makefiles.
 
@@ -30,9 +30,9 @@ The latest Arduino IDE must be installed on development machine. (tested on 1.8.
 Only supports Linux for the host development PC.
 I only have tested on Ubuntu 18.04 at the moment.
 
-Arduino Pro Micro required addon files from SparkFun.
+Arduino Pro Micro requires addon files from SparkFun.
 
-The Arduino_Core_STM32 must be installed for who programs stm32 as well but not required if it is AVR only purpose.
+The Arduino_Core_STM32 must be installed who programs STM32 as well.
 
 I do not have a plan supporting Windows at the moment for keeping the Makefile simple which is the main objective of this project.
 
@@ -43,7 +43,7 @@ Link to how to install Arduino IDE:
 Link to how to install SparkFun Arduino Boards Addon Files:  
 ([https://github.com/sparkfun/Arduino_Boards](https://github.com/sparkfun/Arduino_Boards))
 
-Link to how to install Arduino_Core_STM32i:  
+Link to how to install Arduino_Core_STM32:  
 ([https://github.com/stm32duino/Arduino_Core_STM32](https://github.com/stm32duino/Arduino_Core_STM32))
 
 These are the minimum packages required to build. (Only tested on Ubuntu at the moment)
@@ -71,7 +71,7 @@ $ sudo apt install libusb-1.0.0:i386
   1. Customize variables in Makefile for your dev boards
   1. Build and upload
 
-## Using Makefils for AVR and STM32 <a id="Makefile-which"></a>
+## Makefils for AVR and STM32 <a id="Makefile-which"></a>
 
 First download Makefiles as bellow at the location where the main sources for your developments.
 
@@ -101,20 +101,20 @@ every time will do with having two different Makefiles.
 
 The one of the source files must be `main.cpp` since Arduino libraries expect to be called from c++.
 
-I have prepared `main.cpp` for testing Makefiles in later procedure. It just an example of blinking led from Arduino porject.
+I have prepared `main.cpp` for testing customized Makefiles in later procedures. It is just an example of blinking led from Arduino porject.
 ```sh
 $ wget https://raw.githubusercontent.com/mcd500/arduino-commandliners/master/main.cpp
 ```
 
 ## Configuring Makefile where the arduino is installed <a id="Makefile-arduino"></a>
 
-Some lines in Makefile must be changed for where the arduino is installed. This is my example.
+Some lines in Makefile must match where the arduino is installed in host machine. This is my example.
 
 ```
 ARDUINO_DIR = $(HOME)/projects/arduino-1.8.13-linux64/arduino-1.8.13
 ```
 
-Change the portion of `1.8.13` with the Arduino version.
+Change the portion of `1.8.13` with the Arduino version installed.
 
 The `ARDUINO_DIR` have to be pointing the directory where following files after untar the arduino-1.8.13-linux64.tar.xz.
 ```sh
@@ -158,18 +158,18 @@ AVRDUDE_PROGRAMMER = arduino # choose it from upload.protocol in boards.txt
 
 The MCU could be chosen from `atmega32u4 atmega328p atmega168 atmega2560 atmega1280 atmegang atmega8 attiny85`.
 
-The values to select the `VARIANT` are directory name in `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
+The values to select the `VARIANT` are directory name under `${ARDUINO_DIR}/hardware/arduino/avr/variants`.
 
-It must to have Arduino version as `-DARDUINO=10813` in `ARD_CFLAGS`. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
+It must to have Arduino version similar to `-DARDUINO=10813` in `ARD_CFLAGS` to build libraries successfully. The version `1.8.13` will be `10813`, 1.5.0 will be `10500`.
 
-The `-DARDUINO_ARCH_AVR` must be defined to use some of the libraries.
+The `-DARDUINO_ARCH_AVR` is also required for AVR.
 
-The `-DARDUINO_AVR_UNO` is not really needed, I put it there just because genuine Arduino adds it.
+The `-DARDUINO_AVR_UNO` is not mandatory, I include it there just because genuine Arduino IDE adds it.
 
-The `MONITOR_BAUDRATE` and `AVRDUDE_PROGRAMMER` must have the correct value on each board for avrdude to upload the binary correctly.
-The values could be found from the upload.protocol in `boards.txt`. The `boards.txt` could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
+The `MONITOR_BAUDRATE` and `AVRDUDE_PROGRAMMER` must have the exact value on each board for `avrdude` to upload the binary correctly.
+The available values could be found from the upload.protocol in `boards.txt`. The `boards.txt` could be found at `${ARDUINO_DIR}/hardware/arduino/avr/boards.txt`.
 
-The `MONITOR_PORT` may vary depend on the USB chip on the dev boards. The easiest way is to watch which appears when connecting the board under `/dev/` on your host machine. Most of the time the AVR Arduino boards are `/dev/ttyACM0` and `/dev/ttyUSB0` from other vendors.
+The `MONITOR_PORT` may vary depend on the USB chip on the dev boards. The easiest way to find the value is to watch which appears when connecting the board under `/dev/` on your host machine. Most of the time the AVR Arduino boards are `/dev/ttyACM0` and `/dev/ttyUSB0` from other vendors.
 
 * Pro Micro 5V 16MHz from SparkFun
 ```
@@ -183,12 +183,10 @@ MONITOR_BAUDRATE = 57600
 AVRDUDE_PROGRAMMER = avr109
 ```
 
-The Pro Mirco is from SkarkFun. It have to modify `ARDUINO_VAR_PATH`. Any boards added `Additional Boards Manager URLs` at `File -> Preferences`, they are added to `.arduino15/packages/` with `Providers name/hardsare`, such as `SparkFun/hardware`.
+The Pro Mirco is from SkarkFun. It have to be adjusted `ARDUINO_VAR_PATH`. Any boards added `Additional Boards Manager URLs` at `File -> Preferences`, they are added to `.arduino15/packages/` with `Providers name/hardsare`, such as `SparkFun/hardware`.
 Look inside the `${HOME}/.arduino15/packages/SparkFun/hardware` and search for the directory `variants`.
 
-There will be a directory `promicro` to match the board to set as `VARIANT`.
-
-Same way is possible to user for the boards from any other vendors.
+There will be a directory `promicro` to match the board to set as `VARIANT`. Same way to fine `ARDUINO_VAR_PATH` and `VARIANT` is possible for the boards from any other vendors.
 
 * Pro Mini 5V 16MHz
 ```
@@ -223,13 +221,13 @@ After changing your sources, then typing from command line:
 ```sh
 $ make
 ```
-will build a binary.
+will build binaries.
 
-If you would like to write to your dev board every time after updating sources:
+If you would like to write the image to the dev board every time after updating sources:
 ```sh
 $ make upload
 ```
-will build the sources and write to dev board consequently.
+will build the sources and write it to dev board consequently.
 
 Use bellow for mass storage method of writing binary to STM32:
 ```sh
