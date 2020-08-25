@@ -201,7 +201,7 @@ AVRDUDE_PROGRAMMER = arduino
 ```
 
 See [how to connect UART to PC](#promicro-usb-serial).
-Most of the boards are `MONITOR_BAUDRATE = 57600`.
+Most of the boards works with `MONITOR_BAUDRATE = 57600`.
 
 For STM32 in Makefile-stm32.
 
@@ -240,9 +240,9 @@ $ make -f Makefile-stm32 upload-mass
 
 ## Appendix <a id="Appendix"></a>
 
-### How to connect Pro Mini with use-serial for upload image <a id="promicro-usb-serial"></a>
+### How to connect Arduino Pro Mini with use-serial for uploading image <a id="promicro-usb-serial"></a>
 
-I used ftdi usb serial converter cable. Any usb serial boards are fine connecting wires in the pictures.
+I used a ftdi usb serial converter cable. Any usb serial boards are fine connecting wires as it is in the pictures.
 
 <img src="imgs/Mini-Pro-connection-1.jpg" height="180"> <img src="imgs/pro-mini-usb-serial-connection-1.jpg" height="180"> <img src="imgs/pro-mini-upload-ok-1.png" height="180">
 
