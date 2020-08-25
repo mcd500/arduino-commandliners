@@ -244,7 +244,7 @@ $ make -f Makefile-stm32 upload-mass
 
 I used ftdi usb serial converter cable. Any usb serial boards are fine connecting wires in the pictures.
 
-<img src="imgs/Mini-Pro-connection-1.jpg" height="100"> <img src="imgs/pro-mini-usb-serial-connection-1.jpg" height="100"> <img src="imgs/pro-mini-upload-ok-1.png" height="100">
+<img src="imgs/Mini-Pro-connection-1.jpg" height="180"> <img src="imgs/pro-mini-usb-serial-connection-1.jpg" height="180"> <img src="imgs/pro-mini-upload-ok-1.png" height="180">
 
 ## Credits <a id="Credits"></a>
 
