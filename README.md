@@ -22,7 +22,7 @@ Currently supporting AVR and STM32 only. I have no intention to make this projec
 
 ## Prerequisites <a id="Prerequisites"></a>
 
-*  Arduino IDE which comes with Arduino IDE for programming AVR
+*  Arduino core libraries which comes with Arduino IDE
 *  SparkFun Arduino Boards Addon Files
 *  Arduino_Core_STM32 for programming STM32
 *  Devlopment tools, gcc and etc for the cpu
