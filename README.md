@@ -12,7 +12,7 @@ Currently supporting AVR and STM32 only. I have no intention to make this projec
 
  - [Prerequisites](#Prerequisites)
  - [Basic flow](#Basic-flow)
- - [Makefils for AVR and STM32](#Makefile-which)
+ - [Makefiles for AVR and STM32](#Makefile-which)
  - [Configuring Makefiles to point installed Arduino](#Makefile-arduino)
  - [Configuring Makefiles for dev boards](#Makefile-dev-baords)
  - [Usage](#Usage)
